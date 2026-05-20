@@ -1,0 +1,16 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[functions."text-fix"]
+  timeout = 26
+
+[[redirects]]
+  from = "/api/text"
+  to = "/.netlify/functions/text-fix"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "frame-ancestors 'self' https://web.telegram.org https://*.telegram.org"
