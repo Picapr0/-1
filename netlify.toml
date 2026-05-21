@@ -1,5 +1,6 @@
-const F5AI = "https://api.f5ai.ru/v2/chat/completions";
-const cors = { "Access-Control-Allow-Origin": "*" };
+[build]
+  publish = "."
+  functions = "netlify/functions"
 
 const MODES = [
   {
