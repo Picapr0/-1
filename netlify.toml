@@ -5,9 +5,17 @@
 [functions."text-fix"]
   timeout = 26
 
+[functions."telegram-bot"]
+  timeout = 26
+
 [[redirects]]
   from = "/api/text"
   to = "/.netlify/functions/text-fix"
+  status = 200
+
+[[redirects]]
+  from = "/api/telegram"
+  to = "/.netlify/functions/telegram-bot"
   status = 200
 
 [[headers]]
