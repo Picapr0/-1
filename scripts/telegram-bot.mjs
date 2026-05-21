@@ -46,7 +46,7 @@ const botCfg = loadJson("bot.local.json");
 const f5Cfg = loadJson("config.local.json");
 
 const TOKEN = botCfg?.telegramToken || process.env.TELEGRAM_BOT_TOKEN;
-const WEB_APP = botCfg?.webAppUrl || "https://pavlovartem.netlify.app";
+const WEB_APP = (botCfg?.webAppUrl || "https://symphonious-blini-b9c326.netlify.app").replace(/\/$/, "");
 const F5AI_KEY = f5Cfg?.apiKey || process.env.F5AI_API_KEY;
 const F5AI_MODEL = f5Cfg?.model || process.env.F5AI_MODEL || "gpt-4o";
 
@@ -85,7 +85,7 @@ function mainMenuHtml() {
     `<i>Умная правка текста · F5AI</i>\n\n` +
     `${rows}\n\n` +
     `▸ Отправьте текст сообщением\n` +
-    `▸ Или выберите режим кнопкой ниже`
+    `▸ Затем выберите режим кнопками под сообщением`
   );
 }
 
@@ -97,22 +97,11 @@ function modesInline() {
         { text: "✨ Стиль", callback_data: "mode:style" },
       ],
       [{ text: "💼 Деловой", callback_data: "mode:formal" }],
-      [{ text: "🌐 Открыть сайт", web_app: { url: WEB_APP } }],
-    ],
-  };
-}
-
-function modesReply() {
-  return {
-    keyboard: [
       [
-        { text: "✏️ Грамматика" },
-        { text: "✨ Стиль" },
+        { text: "🌐 Mini App", web_app: { url: WEB_APP } },
+        { text: "🔗 В браузере", url: WEB_APP },
       ],
-      [{ text: "💼 Деловой" }],
     ],
-    resize_keyboard: true,
-    input_field_placeholder: "Вставьте текст для правки…",
   };
 }
 
@@ -183,14 +172,12 @@ async function askF5AI(userMessage, instructions) {
 }
 
 async function showMainMenu(chatId) {
-  await sendHtml(chatId, mainMenuHtml(), {
-    reply_markup: modesInline(),
-  });
   await tg("sendMessage", {
     chat_id: chatId,
-    text: "⌨️ Быстрый выбор режима — кнопки под полем ввода",
-    reply_markup: modesReply(),
+    text: "\u200b",
+    reply_markup: { remove_keyboard: true },
   });
+  await sendHtml(chatId, mainMenuHtml(), { reply_markup: modesInline() });
 }
 
 async function showHelp(chatId) {
@@ -289,7 +276,7 @@ async function handleMessage(msg) {
   }
 
   if (text === "/app") {
-    await sendHtml(chatId, `🌐 <b>Text Fix</b>\nОткройте мини-приложение кнопкой ниже:`, {
+    await sendHtml(chatId, `🌐 <b>Text Fix</b>\nОткройте мини-приложение:`, {
       reply_markup: {
         inline_keyboard: [[{ text: "🌐 Открыть Text Fix", web_app: { url: WEB_APP } }]],
       },
