@@ -92,7 +92,9 @@ async function fix(mode) {
     if (!res.ok) {
       const msg =
         data.error === "config_missing"
-          ? "В Netlify: F5AI_API_KEY → Scopes Functions + Builds → Clear cache deploy"
+          ? location.hostname.includes("--")
+            ? "Открыт старый preview-URL. В BotFather укажите https://symphonious-blini-b9c326.netlify.app"
+            : "В Netlify задайте F5AI_API_KEY и сделайте Clear cache deploy один раз"
           : data.message || data.error || `Ошибка ${res.status}`;
       throw new Error(msg);
     }
